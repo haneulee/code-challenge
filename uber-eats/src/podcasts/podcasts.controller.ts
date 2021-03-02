@@ -25,7 +25,6 @@ export class PodcastsController {
     @Delete(':id')
     remove(@Param('id') podcastId: string) {
         return this.podcastService.deleteOne(podcastId);
-
     }
 
     @Patch(':id')
@@ -38,8 +37,18 @@ export class PodcastsController {
         return this.podcastService.getEpisodes(podcastId);
     }
 
-    // @Post()
-    // createEpisode(@Body() podcastData) {
-    //     return this.podcastService.create(podcastData);
-    // }
+    @Post(':id/episodes')
+    createEpisode(@Param('id') podcastId: string, @Body() episodeData) {
+        return this.podcastService.createEpisode(podcastId, episodeData);
+    }
+
+    @Delete(':id/episodes/:episodeId')
+    removeEpisode(@Param('id') podcastId: string, @Param('episodeId') episodeId: string) {
+        return this.podcastService.deleteEpisode(podcastId, episodeId);
+    }
+
+    @Patch(':id/episodes/:episodeId')
+    patchEpisode(@Param('id') podcastId: string, @Param('episodeId') episodeId: string, @Body() updateData) {
+        return this.podcastService.updateEpisode(podcastId, episodeId, updateData);
+    }
 }

@@ -46,4 +46,59 @@ export class PodcastsService {
         return podcast.episodes;
     }
 
+    createEpisode(id: string, episodeData) {
+        const objIndex = this.podcasts.findIndex((obj => obj.id === +id));
+        if (objIndex === -1) {
+            throw new NotFoundException(`podcast with ID ${id} not found.`);
+        }
+
+        const episodes = this.podcasts[objIndex].episodes;
+
+        this.podcasts[objIndex].episodes = [
+            ...episodes,
+            {
+                id: episodes.length + 1,
+                ...episodeData,
+            }
+        ]
+
+        return this.getAll();
+    }
+
+    deleteEpisode(id: string, episodeId: string) {
+        const objIndex = this.podcasts.findIndex((obj => obj.id === +id));
+        if (objIndex === -1) {
+            throw new NotFoundException(`podcast with ID ${id} not found.`);
+        }
+
+        const episodes = this.podcasts[objIndex].episodes;
+
+        this.podcasts[objIndex].episodes = episodes.filter(episode => episode.id !== +episodeId);
+
+        return this.getAll();
+
+    }
+
+    updateEpisode(id: string, episodeId: string, updateData) {
+        const objIndex = this.podcasts.findIndex((obj => obj.id === +id));
+        if (objIndex === -1) {
+            throw new NotFoundException(`podcast with ID ${id} not found.`);
+        }
+
+        const episodes = this.podcasts[objIndex].episodes;
+
+        const episodeIndex = episodes.findIndex((obj => obj.id === +episodeId));
+        if (episodeIndex === -1) {
+            throw new NotFoundException(`episode with ID ${episodeId} not found.`);
+        }
+
+
+        this.podcasts[objIndex].episodes[episodeIndex] = {
+            ...this.podcasts[objIndex].episodes[episodeIndex],
+            ...updateData
+        }
+
+        return this.getAll();
+    }
+
 }
